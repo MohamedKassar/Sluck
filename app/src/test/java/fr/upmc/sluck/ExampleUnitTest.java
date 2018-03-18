@@ -1,6 +1,10 @@
 package fr.upmc.sluck;
 
+import android.util.Log;
+
 import org.junit.Test;
+
+import fr.upmc.sluck.model.Message;
 
 import static org.junit.Assert.*;
 

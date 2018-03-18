@@ -3,9 +3,12 @@ package fr.upmc.sluck;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import fr.upmc.sluck.model.Message;
 
 import static org.junit.Assert.*;
 
@@ -15,12 +18,14 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class ModelTests {
     @Test
-    public void useAppContext() throws Exception {
+    public void messageTest() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         assertEquals("fr.upmc.sluck", appContext.getPackageName());
+        Message m = new Message("channel", "text", "sender");
+        Log.v("01", m.toString());
+        Log.v("01", new Message(m.toJSON()).toString());
     }
 }
