@@ -8,8 +8,12 @@ import android.util.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fr.upmc.sluck.controllers.ChannelMessagesController;
-import fr.upmc.sluck.model.Message;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+
+import fr.upmc.sluck.controllers.ChannelController;
+import fr.upmc.sluck.utils.Util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,6 +27,9 @@ public class ControllersTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
         Application.setContext(appContext);
         Log.v("01", "messageControllerTest");
-        ChannelMessagesController c = new ChannelMessagesController("channel01", "tiko");
+
+        Log.v("01",Util.APP_FOLDER_PATH);
+        ChannelController cc = new ChannelController();
+        cc.addNewChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")), "Zoro");
     }
 }

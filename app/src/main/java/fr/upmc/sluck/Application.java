@@ -8,9 +8,11 @@ import android.content.Context;
 
 public class Application extends android.app.Application {
     private static Context context;
+    private static String userName;
 
     public void onCreate() {
         super.onCreate();
+        userName = "user";//TODO
         //Application.context = getApplicationContext(); // TODO put
     }
 
@@ -18,6 +20,7 @@ public class Application extends android.app.Application {
         Application.context = context;
     }
 
+    public static String getUserName(){return userName;}
     public static Context getContext() {
         return Application.context;
     }

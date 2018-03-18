@@ -35,9 +35,14 @@ public class Message {
         this(channel, text, sender, new Date());
     }
 
-    public String toJSON() throws JSONException {
-        return new JSONObject().put("channel", channel).put("text", text)
-                .put("sender", sender).put("date", date.toString()).toString();
+    public String toJSON() {
+        try {
+            return new JSONObject().put("channel", channel).put("text", text)
+                    .put("sender", sender).put("date", date.toString()).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
     }
 
     public String getChannel() {
@@ -58,11 +63,6 @@ public class Message {
 
     @Override
     public String toString() {
-        try {
-            return toJSON();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "{\"error\":\""+e.getMessage()+"\"}";
-        }
+        return toJSON();
     }
 }
