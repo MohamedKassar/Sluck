@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import fr.upmc.sluck.controllers.ChannelController;
+import fr.upmc.sluck.model.Channel;
+import fr.upmc.sluck.model.Message;
 import fr.upmc.sluck.utils.Util;
 
 import static org.junit.Assert.assertEquals;
@@ -30,7 +32,7 @@ public class ControllersTests {
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
         ChannelController cc = new ChannelController();
-        cc.addNewChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")), "Zoro");
+        cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
     }
 
     @Test
@@ -39,15 +41,20 @@ public class ControllersTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
         Application.setContext(appContext);
 
-        Util.purgeData();
+//        Util.purgeData();
         Log.v("01", "retrieveChannelsTest");
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
         ChannelController cc = new ChannelController();
-        cc.addNewChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")), "Zoro");
-        cc.addNewChannel("testChannel02", new LinkedList<String>(Arrays.asList("user04", "user05", "user06")), "Batman");
-        cc.addNewChannel("testChannel03", new LinkedList<String>(Arrays.asList("user07", "user08", "user09")), "Superman");
+        cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
+        cc.addNewLocalChannel("testChannel02", new LinkedList<String>(Arrays.asList("user04", "user05", "user06")));
+        cc.addNewLocalChannel("testChannel03", new LinkedList<String>(Arrays.asList("user07", "user08", "user09")));
+        Channel c1 = cc.getChannel("testChannel01");
+//        for(int i = 0; i < 200 ; i++){
+//            cc.postMessageOnChannel(new Message("testChannel01","m "+ i,"zoro"), c1);
+//        }
         Log.v("01", Arrays.toString(new File(Util.CHANNELS_FOLDER_PATH).listFiles()));
+        Log.v("01", "LOILOI " + c1.getMessages().size());
         cc.readMyChannels().forEach(c -> Log.v("01", c.toString()));
 
     }

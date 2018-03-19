@@ -53,7 +53,7 @@ public class Util {
 
     public static void eraseAndWriteInFile(String channelName, String fileName, String text) throws UtilException {
         try {
-            deleteFileIfExists(channelName, CHANNEL_INFO_FILE_NAME);
+            deleteFileIfExists(channelName, fileName);
             File file = createOrGetFile(channelName, fileName);
             FileOutputStream fos = new FileOutputStream(file, true);
             fos.write(text.getBytes());

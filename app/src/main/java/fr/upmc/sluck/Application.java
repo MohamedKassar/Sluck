@@ -13,8 +13,10 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         userName = "user";//TODO
-        //Application.context = getApplicationContext(); // TODO put
+        Application.context = getApplicationContext(); // TODO put
+
     }
+
 
     public static void setContext(Context context) { //TODO remove
         Application.context = context;

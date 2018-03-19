@@ -22,9 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Application.setContext(getApplicationContext());
         try {
-            System.out.println("\n\n\n"+ Util.readFile("testChannel01", Util.CHANNEL_INFO_FILE_NAME)+"\n\n\n");
-
-           System.out.println("\n\n\n"+ Util.readFile("testChannel01", Util.CHANNEL_INFO_FILE_NAME)+"\n\n\n");
+            System.out.println("\n\n\n" + Util.readFile("testChannel01", Util.CHANNEL_INFO_FILE_NAME) + "\n\n\n");
+            System.out.println("\n\n\n" + Util.readFile("testChannel01", Util.CHANNEL_INFO_FILE_NAME) + "\n\n\n");
         } catch (UtilException e) {
             e.printStackTrace();
         }
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Log.v("01", " louloulou " + new File(Util.CHANNELS_FOLDER_PATH).getAbsolutePath());
         ChannelController cc = new ChannelController();
         try {
-            cc.addNewChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")), "Zoro");
+            cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
         } catch (UtilException e) {
             e.printStackTrace();
         }
