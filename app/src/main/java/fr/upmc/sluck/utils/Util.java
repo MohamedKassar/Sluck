@@ -19,23 +19,25 @@ import fr.upmc.sluck.utils.exceptions.UtilException;
 
 public class Util {
 
-    public static final String APPLICATION_PATH = Application.getContext().getFilesDir().getAbsolutePath();
-    private static final String APP_FOLDER_NAME = "Sluck_Channels";
-    public static final String CHANNEL_INFO_FILE_NAME = "infos.xml";
-    public static final String APP_FOLDER_PATH = APPLICATION_PATH + File.separator + APP_FOLDER_NAME;
+    private static final String APPLICATION_PATH = Application.getContext().getFilesDir().getAbsolutePath();
+    private static final String CHANNELS_FOLDER_NAME = "Sluck_Channels";
+    public static final String CHANNEL_INFO_FILE_NAME = "infos";
+    public static final String CHANNELS_FOLDER_PATH = APPLICATION_PATH + File.separator + CHANNELS_FOLDER_NAME;
 
     static {
         try {
-            createFolder(APP_FOLDER_NAME);
+            createFolder(CHANNELS_FOLDER_NAME);
         } catch (UtilException e) {
             e.printStackTrace();
         }
     }
 
     public static void createChannelFolder(String channelName, List<String> users, String owner) throws UtilException {
-        createFolder(APP_FOLDER_NAME + File.separator + channelName);
+        createFolder(CHANNELS_FOLDER_NAME + File.separator + channelName);
         try {
-            eraseAndWriteInFile(channelName, CHANNEL_INFO_FILE_NAME, new JSONObject().put("users", new JSONArray(users).toString()).put("owner", owner).toString());
+            JSONArray jUsers = new JSONArray();
+            users.forEach(jUsers::put);
+            eraseAndWriteInFile(channelName, CHANNEL_INFO_FILE_NAME, new JSONObject().put("users", jUsers).put("owner", owner).toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -43,7 +45,7 @@ public class Util {
     }
 
     public static void deleteFileIfExists(String channelName, String fileName) throws UtilException {
-        File file = new File(APP_FOLDER_PATH + File.separator + channelName + File.separator + fileName);
+        File file = new File(CHANNELS_FOLDER_PATH + File.separator + channelName + File.separator + fileName);
         if (!file.exists()) {
             file.delete();
         }
@@ -65,7 +67,7 @@ public class Util {
 
     public static String readFile(String channelName, String fileName) throws UtilException {
         try {
-            FileInputStream fis = new FileInputStream(new File(APP_FOLDER_PATH + File.separator + channelName + File.separator + fileName));
+            FileInputStream fis = new FileInputStream(new File(CHANNELS_FOLDER_PATH + File.separator + channelName + File.separator + fileName));
             String data = "";
             int temp;
             while ((temp = fis.read()) != -1) {
@@ -78,7 +80,7 @@ public class Util {
     }
 
     public static File createOrGetFile(String channelName, String fileName) throws UtilException {
-        File file = new File(APP_FOLDER_PATH + File.separator + channelName + File.separator + fileName);
+        File file = new File(CHANNELS_FOLDER_PATH + File.separator + channelName + File.separator + fileName);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -104,11 +106,12 @@ public class Util {
     }
 
     public static void purgeData() {
-        File file = new File(APP_FOLDER_PATH);
+        File file = new File(CHANNELS_FOLDER_PATH);
         if (file.exists()) {
             deleteFileOrDirectory(file);
         }
     }
+
     private static void deleteFileOrDirectory(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())

@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         Util.purgeData();
         Log.v("01", "messageControllerTest");
 
-        Log.v("01", Util.APP_FOLDER_PATH);
-        Log.v("01", " louloulou " + new File(Util.APP_FOLDER_PATH).getAbsolutePath());
+        Log.v("01", Util.CHANNELS_FOLDER_PATH);
+        Log.v("01", " louloulou " + new File(Util.CHANNELS_FOLDER_PATH).getAbsolutePath());
         ChannelController cc = new ChannelController();
         try {
             cc.addNewChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")), "Zoro");

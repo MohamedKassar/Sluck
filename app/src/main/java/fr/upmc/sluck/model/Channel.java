@@ -15,9 +15,9 @@ public class Channel {
     private String owner;
     private List<Message> messages;
 
-    public Channel(String name, List<String> members, String owner) {
+    public Channel(String name, List<String> users, String owner) {
         this.name = name;
-        this.users = members;
+        this.users = users;
         this.owner = owner;
         this.messages = new LinkedList<>();
     }
@@ -43,5 +43,15 @@ public class Channel {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "name='" + name + '\'' +
+                ", users=" + users +
+                ", owner='" + owner + '\'' +
+                ", messages=" + messages +
+                '}';
     }
 }
