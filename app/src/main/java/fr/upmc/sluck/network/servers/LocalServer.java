@@ -53,7 +53,7 @@ public class LocalServer extends Thread {
                         }
                         break;
                     case Sender.MESSAGE_TOKEN:
-                        channelsController.postMessageOnChannel(new Message(request[1], request[3], request[2]), request[1]);
+                        channelsController.receiveMessageOnChannel(new Message(request[1], request[3], request[2]), request[1]);
                         break;
                     case Sender.NEW_CHANNEL_TOKEN:
                         channelsController.addAvailibaleChannel(request[1], request[2]);

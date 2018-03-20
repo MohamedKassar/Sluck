@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import fr.upmc.sluck.Application;
 import fr.upmc.sluck.model.Message;
+import fr.upmc.sluck.network.client.Sender;
 import fr.upmc.sluck.utils.exceptions.UtilException;
 import fr.upmc.sluck.model.Channel;
 import fr.upmc.sluck.utils.Util;
@@ -28,12 +29,14 @@ import fr.upmc.sluck.utils.Util;
 
 public class ChannelsController {
     public List<Channel> myChannels, otherChannels, availableChannels;
+    private final Sender sender;
 
-    public ChannelsController() {
+    public ChannelsController(Sender sender) {
         myChannels = new LinkedList<>();
         otherChannels = new LinkedList<>();
         availableChannels = new LinkedList<>();
         myChannels.addAll(readMyChannels());
+        this.sender = sender;
     }
 
     public void addAvailibaleChannel(String channelName, String owner) {
@@ -46,6 +49,7 @@ public class ChannelsController {
         Util.createChannelFolder(name, users, Application.getUserName());
         Channel channel = new Channel(name, users, Application.getUserName(), true);
         myChannels.add(channel);
+        sender.notifyChannelCreation(name);
     }
 
     public Channel addNewUser(String channelName, String userName) {
@@ -82,7 +86,7 @@ public class ChannelsController {
         otherChannels.add(channel);
     }
 
-    public void postMessageOnChannel(Message message, String channelName) {
+    public Channel receiveMessageOnChannel(Message message, String channelName) {
         Channel channel = getChannel(channelName);
         if (channel != null) {
             if (myChannels.contains(channel) && channel.isFullCache()) {
@@ -102,6 +106,12 @@ public class ChannelsController {
             }
             channel.postMessage(message);
         }
+        return channel;
+    }
+
+    public void sendMessageOnChannel(String message, String channelName) {
+        Channel channel = receiveMessageOnChannel(new Message(channelName, message, Application.getUserName()), channelName);
+        if (channel != null) sender.sendMessage(channel, message);
     }
 
     private List<Message> readMessagesFromChannel(String channelName, int packetsNumber) {

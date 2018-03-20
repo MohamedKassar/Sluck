@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("01", Util.CHANNELS_FOLDER_PATH);
         Log.v("01", " louloulou " + new File(Util.CHANNELS_FOLDER_PATH).getAbsolutePath());
-        ChannelsController cc = new ChannelsController();
+//        ChannelsController cc = new ChannelsController();
 //        try {
 //            cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
 //        } catch (UtilException e) {
