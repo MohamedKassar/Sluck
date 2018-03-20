@@ -10,11 +10,11 @@ import java.util.List;
  */
 
 public class Channel {
-    private String name;
-    private List<String> users;
-    private String owner;
+    private final String name;
+    private final List<String> users;
+    private final String owner;
     private List<Message> cache;
-    private List<Message> allMessages;
+    private final List<Message> allMessages;
 
     public Channel(String name, List<String> users, String owner, boolean local) {
         this.name = name;
