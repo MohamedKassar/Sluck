@@ -12,9 +12,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import fr.upmc.sluck.controllers.ChannelController;
+import fr.upmc.sluck.controllers.ChannelsController;
 import fr.upmc.sluck.model.Channel;
-import fr.upmc.sluck.model.Message;
 import fr.upmc.sluck.utils.Util;
 
 import static org.junit.Assert.assertEquals;
@@ -31,8 +30,8 @@ public class ControllersTests {
         Log.v("01", "addLocalChannelTest");
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
-        ChannelController cc = new ChannelController();
-        cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
+        ChannelsController cc = new ChannelsController();
+        cc.addNewLocalChannel("testChannel01");
     }
 
     @Test
@@ -45,10 +44,10 @@ public class ControllersTests {
         Log.v("01", "retrieveChannelsTest");
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
-        ChannelController cc = new ChannelController();
-        cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
-        cc.addNewLocalChannel("testChannel02", new LinkedList<String>(Arrays.asList("user04", "user05", "user06")));
-        cc.addNewLocalChannel("testChannel03", new LinkedList<String>(Arrays.asList("user07", "user08", "user09")));
+        ChannelsController cc = new ChannelsController();
+        cc.addNewLocalChannel("testChannel01");
+        cc.addNewLocalChannel("testChannel02");
+        cc.addNewLocalChannel("testChannel03");
         Channel c1 = cc.getChannel("testChannel01");
 //        for(int i = 0; i < 200 ; i++){
 //            cc.postMessageOnChannel(new Message("testChannel01","m "+ i,"zoro"), c1);
