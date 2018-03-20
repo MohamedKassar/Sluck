@@ -1,5 +1,6 @@
 package fr.upmc.sluck.controllers;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -7,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.security.acl.Owner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -24,27 +26,53 @@ import fr.upmc.sluck.utils.Util;
  * Created by ktare on 18/03/2018.
  */
 
-public class ChannelController {
-    public List<Channel> myChannels, otherChannels;
+public class ChannelsController {
+    public List<Channel> myChannels, otherChannels, availableChannels;
 
-    public ChannelController() {
+    public ChannelsController() {
         myChannels = new LinkedList<>();
         otherChannels = new LinkedList<>();
+        availableChannels = new LinkedList<>();
         myChannels.addAll(readMyChannels());
     }
 
-    public void addNewLocalChannel(String name, List<String> users) throws UtilException {
+    public void addAvailibaleChannel(String channelName, String owner) {
+        availableChannels.add(new Channel(channelName, null, owner, false));
+    }
+
+    public void addNewLocalChannel(String name) throws UtilException {
+        List<String> users = new LinkedList<>();
+        users.add(Application.getUserName());
         Util.createChannelFolder(name, users, Application.getUserName());
         Channel channel = new Channel(name, users, Application.getUserName(), true);
         myChannels.add(channel);
     }
 
+    public Channel addNewUser(String channelName, String userName) {
+        Channel channel = getChannel(channelName);
+        if (channel != null) {
+            channel.getUsers().add(userName);
+            if (myChannels.contains(channel)) {
+                JSONArray jUsers = new JSONArray();
+                channel.getUsers().forEach(jUsers::put);
+                try {
+                    Util.eraseAndWriteInFile(channelName, Util.CHANNEL_INFO_FILE_NAME,
+                            new JSONObject().put("users", jUsers).put("owner", Application.getUserName()).toString());
+                } catch (JSONException | UtilException e) {
+                    e.printStackTrace();
+                    Log.v("01", "Cannot add user to channel.", e);
+                }
+            }
+        }
+        return channel;
+    }
+
     public Channel getChannel(String channelName) {
         for (Channel c : myChannels) {
-            if(c.getName().equals(channelName))return c;
+            if (c.getName().equals(channelName)) return c;
         }
         for (Channel c : otherChannels) {
-            if(c.getName().equals(channelName))return c;
+            if (c.getName().equals(channelName)) return c;
         }
         return null;
     }
@@ -54,23 +82,26 @@ public class ChannelController {
         otherChannels.add(channel);
     }
 
-    public void postMessageOnChannel(Message message, Channel channel) {
-        if (myChannels.contains(channel) && channel.isFullCache()) {
-            List<Message> temp = channel.flushCache();
-            Date date = new Date();
-            try {
-                JSONArray ja = new JSONArray();
-                temp.stream().map(Message::toJSON).forEach(ja::put);
-                JSONObject jo = new JSONObject();
-                jo.put("messages", ja);
-                Util.eraseAndWriteInFile(channel.getName(), date.getTime() + "", jo.toString());
-            } catch (JSONException | UtilException e) {
-                e.printStackTrace();
-                Toast.makeText(Application.getContext(),
-                        "Last 100 messages for " + channel.getName() + " was lost", Toast.LENGTH_LONG);
+    public void postMessageOnChannel(Message message, String channelName) {
+        Channel channel = getChannel(channelName);
+        if (channel != null) {
+            if (myChannels.contains(channel) && channel.isFullCache()) {
+                List<Message> temp = channel.flushCache();
+                Date date = new Date();
+                try {
+                    JSONArray ja = new JSONArray();
+                    temp.stream().map(Message::toJSON).forEach(ja::put);
+                    JSONObject jo = new JSONObject();
+                    jo.put("messages", ja);
+                    Util.eraseAndWriteInFile(channelName, date.getTime() + "", jo.toString());
+                } catch (JSONException | UtilException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Application.getContext(),
+                            "Last 100 messages for " + channelName + " was lost", Toast.LENGTH_LONG);
+                }
             }
+            channel.postMessage(message);
         }
-        channel.postMessage(message);
     }
 
     private List<Message> readMessagesFromChannel(String channelName, int packetsNumber) {
