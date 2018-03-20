@@ -10,6 +10,10 @@ public class Application extends android.app.Application {
     private static Context context;
     private static String userName;
 
+    public static void setUserName(String userName) {
+        Application.userName = userName;
+    }
+
     public void onCreate() {
         super.onCreate();
         userName = "user";//TODO
