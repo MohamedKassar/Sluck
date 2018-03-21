@@ -56,13 +56,12 @@ public class LocalServer extends Thread {
                         channelsController.receiveMessageOnChannel(new Message(request[1], request[3], request[2]), request[1]);
                         break;
                     case Sender.NEW_CHANNEL_TOKEN:
-                        channelsController.addAvailibaleChannel(request[1], request[2]);
+                        channelsController.addAvailableChannel(request[1], request[2]);
                         break;
 
                     case Sender.NOTIFY_NEW_MEMBER_TOKEN:
                         channelsController.addNewUser(request[1], request[2]);
                         break;
-
                 }
             }
         } catch (IOException e) {

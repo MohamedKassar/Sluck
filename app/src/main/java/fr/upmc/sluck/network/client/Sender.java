@@ -69,8 +69,9 @@ public class Sender {
     }
 
     public void joinChannel(String channelName, String owner) {
-        User user = USERS_ADDRESSES.stream().filter(user1 -> user1.getName().equals(owner)).findAny().get();
-        send(user, JOIN_CHANNEL_TOKEN + " " + channelName + " " + Application.getUserName());
+        User user = USERS_ADDRESSES.stream().filter(user1 -> user1.getName().equals(owner)).findAny().orElse(null);
+        if (user != null)
+            send(user, JOIN_CHANNEL_TOKEN + " " + channelName + " " + Application.getUserName());
     }
 
     public void notifyDisconnexion() {

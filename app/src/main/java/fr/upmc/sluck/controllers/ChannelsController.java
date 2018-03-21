@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import fr.upmc.sluck.Application;
@@ -28,7 +29,7 @@ import fr.upmc.sluck.utils.Util;
  */
 
 public class ChannelsController {
-    public List<Channel> myChannels, otherChannels, availableChannels;
+    private List<Channel> myChannels, otherChannels, availableChannels;
     private final Sender sender;
 
     public ChannelsController(Sender sender) {
@@ -39,7 +40,7 @@ public class ChannelsController {
         this.sender = sender;
     }
 
-    public void addAvailibaleChannel(String channelName, String owner) {
+    public void addAvailableChannel(String channelName, String owner) {
         availableChannels.add(new Channel(channelName, null, owner, false));
     }
 
@@ -101,7 +102,7 @@ public class ChannelsController {
                 } catch (JSONException | UtilException e) {
                     e.printStackTrace();
                     Toast.makeText(Application.getContext(),
-                            "Last 100 messages for " + channelName + " was lost", Toast.LENGTH_LONG);
+                            "Last 100 messages for " + channelName + " was lost", Toast.LENGTH_LONG).show();
                 }
             }
             channel.postMessage(message);
@@ -142,8 +143,8 @@ public class ChannelsController {
     public List<Channel> readMyChannels() {
         File channelsFolder = new File(Util.CHANNELS_FOLDER_PATH);
         File[] files = channelsFolder.listFiles();
-        if (files == null || files.length == 0) return Collections.EMPTY_LIST;
-        return Arrays.asList(files).stream().filter(File::isDirectory).map(folder -> {
+        if (files == null || files.length == 0) return new LinkedList<>();
+        return Arrays.stream(files).filter(File::isDirectory).map(folder -> {
             String name = folder.getName();
             List<String> users = new LinkedList<>();
             String owner;
@@ -159,6 +160,6 @@ public class ChannelsController {
             }
             return new Channel(name, users, owner, true)
                     .initMessages(readMessagesFromChannel(name, 2));
-        }).filter(channel -> channel != null).collect(Collectors.toList());
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 }
