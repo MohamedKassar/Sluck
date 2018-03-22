@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import fr.upmc.sluck.Application;
 import fr.upmc.sluck.R;
 import fr.upmc.sluck.controllers.ChannelsController;
+import fr.upmc.sluck.model.Message;
 import fr.upmc.sluck.utils.exceptions.UtilException;
 import fr.upmc.sluck.utils.Util;
 

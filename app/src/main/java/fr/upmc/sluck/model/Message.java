@@ -24,7 +24,7 @@ public class Message {
         date = new Date(o.getString("date"));
     }
 
-    private Message(String channel, String text, String sender, Date date) {
+    public Message(String channel, String text, String sender, Date date) {
         this.channel = channel;
         this.text = text;
         this.sender = sender;
