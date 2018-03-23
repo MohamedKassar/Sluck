@@ -10,9 +10,8 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.LinkedList;
 
-import fr.upmc.sluck.controllers.ChannelsController;
+import fr.upmc.sluck.controllers.GlobalController;
 import fr.upmc.sluck.model.Channel;
 import fr.upmc.sluck.utils.Util;
 
@@ -30,7 +29,7 @@ public class ControllersTests {
         Log.v("01", "addLocalChannelTest");
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
-        ChannelsController cc = new ChannelsController();
+        GlobalController cc = new GlobalController();
         cc.addNewLocalChannel("testChannel01");
     }
 
@@ -44,7 +43,7 @@ public class ControllersTests {
         Log.v("01", "retrieveChannelsTest");
 
         Log.v("01",Util.CHANNELS_FOLDER_PATH);
-        ChannelsController cc = new ChannelsController();
+        GlobalController cc = new GlobalController();
         cc.addNewLocalChannel("testChannel01");
         cc.addNewLocalChannel("testChannel02");
         cc.addNewLocalChannel("testChannel03");

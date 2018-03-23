@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 import fr.upmc.sluck.Application;
 import fr.upmc.sluck.R;
-import fr.upmc.sluck.controllers.ChannelsController;
-import fr.upmc.sluck.model.Message;
 import fr.upmc.sluck.utils.exceptions.UtilException;
 import fr.upmc.sluck.utils.Util;
 
@@ -33,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("01", Util.CHANNELS_FOLDER_PATH);
         Log.v("01", " louloulou " + new File(Util.CHANNELS_FOLDER_PATH).getAbsolutePath());
-//        ChannelsController cc = new ChannelsController();
+//        GlobalController cc = new GlobalController();
 //        try {
 //            cc.addNewLocalChannel("testChannel01", new LinkedList<String>(Arrays.asList("user01", "user02", "user03")));
 //        } catch (UtilException e) {

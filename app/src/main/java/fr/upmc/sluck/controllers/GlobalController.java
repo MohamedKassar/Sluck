@@ -28,11 +28,11 @@ import fr.upmc.sluck.utils.Util;
  * Created by ktare on 18/03/2018.
  */
 
-public class ChannelsController {
+public class GlobalController {
     private List<Channel> myChannels, otherChannels, availableChannels;
     private final Sender sender;
 
-    public ChannelsController(Sender sender) {
+    public GlobalController(Sender sender) {
         myChannels = new LinkedList<>();
         otherChannels = new LinkedList<>();
         availableChannels = new LinkedList<>();
