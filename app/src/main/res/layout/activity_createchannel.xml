@@ -20,7 +20,7 @@
             android:layout_marginBottom="24dp"
             android:src="@drawable/logo" />
 
-        <!--  Name Label -->
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
@@ -37,11 +37,9 @@
             android:layout_marginTop="8dp"
             android:text="4000" />
 
-        <!-- Email Label -->
 
-        <!-- Password Label -->
 
-        <!-- Signup Button -->
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_createChannel"
             android:layout_width="fill_parent"
