@@ -8,7 +8,9 @@ import java.io.IOException;
 
 import fr.upmc.sluck.controllers.GlobalController;
 import fr.upmc.sluck.network.client.Sender;
+import fr.upmc.sluck.network.servers.ConnexionServer;
 import fr.upmc.sluck.network.servers.LocalServer;
+import fr.upmc.sluck.utils.exceptions.UtilException;
 
 /**
  * Created by ktare on 18/03/2018.
@@ -49,7 +51,17 @@ public class Application extends android.app.Application {
         }
     }
 
-
+    private boolean connexionServerStarted = false;
+    public ConnexionServer startConnexionServer() throws IOException, UtilException {
+        if(!connexionServerStarted) {
+            final ConnexionServer connexionServer = new ConnexionServer(0);
+            connexionServer.start();
+            connexionServerStarted = true;
+            return connexionServer;
+        }else {
+            throw new UtilException(UtilException.ExceptionType.SERVER_ALREADY_CREATED,null);
+        }
+    }
 
     public static void setContext(Context context) { //TODO remove
         Application.context = context;

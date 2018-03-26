@@ -1,13 +1,18 @@
 package fr.upmc.sluck.network.servers;
 
+import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,19 +25,32 @@ import fr.upmc.sluck.network.client.Sender;
 
 public class ConnexionServer extends Thread {
     private final int port;
+    private String ipAdress;
     private final static List<User> USERS_ADDRESSES = new LinkedList<>();
-
-    public ConnexionServer(int serverPort) {
+    private final ServerSocket server;
+    public ConnexionServer(int serverPort) throws IOException {
         setDaemon(true);
         this.port = serverPort;
+        server = new ServerSocket(port);
     }
+
+
+
+    public String getHostIp() throws UnknownHostException {
+        return server.getLocalSocketAddress().toString();
+    }
+    public int getPort(){
+        return  server.getLocalPort();
+    }
+
 
     @Override
     public void run() {
-        ServerSocket server = null;
+
         try {
-            server = new ServerSocket(port);
             Socket client;
+
+
             while (true) {
                 client = server.accept();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));

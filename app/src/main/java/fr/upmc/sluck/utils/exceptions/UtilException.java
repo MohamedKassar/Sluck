@@ -5,7 +5,7 @@ package fr.upmc.sluck.utils.exceptions;
  */
 
 public class UtilException extends Exception{
-    public enum ExceptionType{FILE_CREATION, FOLDER_CREATION, FILE_READ, FILE_WRITE}
+    public enum ExceptionType{FILE_CREATION, FOLDER_CREATION, FILE_READ, FILE_WRITE, SERVER_ALREADY_CREATED}
     private String message;
     public UtilException(ExceptionType type, String name) {
         switch (type){
@@ -20,6 +20,9 @@ public class UtilException extends Exception{
                 break;
             case FOLDER_CREATION:
                 message = "Unable to create folder: " + name;
+                break;
+            case SERVER_ALREADY_CREATED:
+                message = "Server is already created";
                 break;
         }
 
