@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class Sender {
         final Socket socket = send(connexionServerIp, connexionServerPort, Application.getUserName());
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         final String[] response = bufferedReader.readLine().split(";");
+
         LocalServer.setPort(Integer.parseInt(response[0]));
         for (int i = 1; i < response.length; i++) {
             if (!response[i].isEmpty())
@@ -109,9 +111,9 @@ public class Sender {
 
     private Socket send(String ip, int port, String message) throws IOException {
         Socket socket = new Socket(ip, port);
-        final OutputStream outputStream = socket.getOutputStream();
-        outputStream.write(message.getBytes());
-        outputStream.flush();
+        final PrintStream out = new PrintStream(socket.getOutputStream());
+        out.println(message);
+        out.flush();
         return socket;
     }
 
