@@ -30,8 +30,8 @@ public class ConnexionServer extends Thread {
     private final ServerSocket server;
     public ConnexionServer(int serverPort) throws IOException {
         setDaemon(true);
-        this.port = serverPort;
-        server = new ServerSocket(port);
+        server = new ServerSocket(serverPort);
+        this.port = server.getLocalPort();
     }
 
 
@@ -62,11 +62,11 @@ public class ConnexionServer extends Thread {
                    final String userName = message;
                    final String clientIP = client.getInetAddress().getHostAddress();
                    final OutputStream outputStream = client.getOutputStream();
-                   String response = port + ";";
+                   String response = (port + 1) + ";";
                    response += USERS_ADDRESSES.stream().map(User::toJSON).reduce("",(user, user2) -> user +";"+user2);
                    outputStream.write(response.getBytes());
                    outputStream.flush();
-                   USERS_ADDRESSES.add(new User(userName,clientIP,port));
+                   USERS_ADDRESSES.add(new User(userName,clientIP,port + 1));
                }
             }
         } catch (IOException e) {
