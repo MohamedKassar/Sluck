@@ -36,30 +36,27 @@ public class Application extends android.app.Application {
     private LocalServer localServer;
     private GlobalController controller;
 
-    public void connect(String userName, String connexionServerIp, int port) {
+    public void connect(String userName, String connexionServerIp, int port) throws IOException, JSONException {
         if (!connected) {
-            try {
-                this.sender = new Sender(userName, connexionServerIp, port);
-                this.controller = new GlobalController(sender);
-                this.localServer = new LocalServer(controller, sender);
-                //todo
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            this.sender = new Sender(userName, connexionServerIp, port);
+            this.controller = new GlobalController(sender);
+            this.localServer = new LocalServer(controller, sender);
+            Application.userName = userName;
+            this.connected = true;
+            //todo
         }
     }
 
     private boolean connexionServerStarted = false;
+
     public ConnexionServer startConnexionServer() throws IOException, UtilException {
-        if(!connexionServerStarted) {
+        if (!connexionServerStarted) {
             final ConnexionServer connexionServer = new ConnexionServer(0);
             connexionServer.start();
             connexionServerStarted = true;
             return connexionServer;
-        }else {
-            throw new UtilException(UtilException.ExceptionType.SERVER_ALREADY_CREATED,null);
+        } else {
+            throw new UtilException(UtilException.ExceptionType.SERVER_ALREADY_CREATED, null);
         }
     }
 
