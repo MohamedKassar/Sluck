@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.upmc.sluck.Application;
+import fr.upmc.sluck.controllers.GlobalController;
 import fr.upmc.sluck.model.Channel;
 import fr.upmc.sluck.model.User;
 import fr.upmc.sluck.network.servers.LocalServer;
@@ -30,18 +31,22 @@ public class Sender {
     public final static String MESSAGE_TOKEN = "MESSAGE";
     public final static String JOIN_CHANNEL_TOKEN = "JOIN";
     public final static String NOTIFY_NEW_MEMBER_TOKEN = "NOTIMEM";
+    public final static String SIGNAL_CHANNEL_TOKEN = "CHANNELS";
 
     private final static List<User> USERS_ADDRESSES = new LinkedList<>();
 
     private final String connexionServerIp;
     private final int connexionServerPort;
 
-    public Sender(String userName, String connexionServerIp, int connexionServerPort) throws IOException, JSONException {
+    public Sender(String userName, String connexionServerIp, int connexionServerPort) {
         this.connexionServerIp = connexionServerIp;
         this.connexionServerPort = connexionServerPort;
-        Application.setUserName(userName);
-        final Socket socket = send(connexionServerIp, connexionServerPort, userName);
+        //USERS_ADDRESSES.forEach(user -> send(user,));
+    }
 
+
+    public void connect(GlobalController gc) throws IOException, JSONException {
+        final Socket socket = send(connexionServerIp, connexionServerPort, Application.getUserName());
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         final String[] response = bufferedReader.readLine().split(";");
         LocalServer.setPort(Integer.parseInt(response[0]));
@@ -49,7 +54,16 @@ public class Sender {
             if (!response[i].isEmpty())
                 USERS_ADDRESSES.add(new User(response[i]));
         }
-        USERS_ADDRESSES.forEach(user -> send(user, CONNEXION_TOKEN + " " + userName + " " + connexionServerPort));
+        USERS_ADDRESSES.forEach(user -> send(user, CONNEXION_TOKEN + " " + Application.getUserName() + " " + connexionServerPort));
+        signalMyChannels(gc);
+    }
+
+    public void signalMyChannels(GlobalController gc) {
+        USERS_ADDRESSES.forEach(user -> gc.getMyChannels().stream()
+                .map(ch -> Application.getUserName() + " " + ch.getName() + " "
+                        + (ch.getUsers().contains(user.getName()) ? "true" + " "
+                        + ch.getUsers().stream().reduce("", (a, b) -> a + " " + b) : "false"))
+                .forEach(ch -> send(user, SIGNAL_CHANNEL_TOKEN + " " + ch)));
     }
 
     public void sendMessage(Channel channel, String message) {

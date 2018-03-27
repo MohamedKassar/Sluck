@@ -38,10 +38,11 @@ public class Application extends android.app.Application {
 
     public void connect(String userName, String connexionServerIp, int port) throws IOException, JSONException {
         if (!connected) {
+            Application.userName = userName;
             this.sender = new Sender(userName, connexionServerIp, port);
             this.controller = new GlobalController(sender);
             this.localServer = new LocalServer(controller, sender);
-            Application.userName = userName;
+            sender.connect(this.controller);
             this.connected = true;
             //todo
         }

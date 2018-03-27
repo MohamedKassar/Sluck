@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.upmc.sluck.controllers.GlobalController;
 import fr.upmc.sluck.model.Channel;
@@ -45,6 +47,7 @@ public class LocalServer extends Thread {
                         break;
                     case Sender.CONNEXION_TOKEN:
                         Sender.addUser(request[1], client.getInetAddress().getHostAddress(), Integer.parseInt(request[2]));
+                        this.sender.signalMyChannels(globalController);
                         break;
                     case Sender.JOIN_CHANNEL_TOKEN:
                         Channel temp = globalController.addNewUser(request[1], request[2]);
@@ -61,6 +64,17 @@ public class LocalServer extends Thread {
 
                     case Sender.NOTIFY_NEW_MEMBER_TOKEN:
                         globalController.addNewUser(request[1], request[2]);
+                        break;
+                    case Sender.SIGNAL_CHANNEL_TOKEN:
+                        if (request[3].contains("false")) {
+                            globalController.addAvailableChannel(request[2], request[1]);
+                        } else {
+                            List<String> users = new ArrayList<>();
+                            for (int i = 4; i < request.length; i++) {
+                                users.add(request[i]);
+                            }
+                            globalController.addNewChannel(request[2], users);
+                        }
                         break;
                 }
             }

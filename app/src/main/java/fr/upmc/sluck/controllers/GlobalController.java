@@ -82,6 +82,10 @@ public class GlobalController {
         return null;
     }
 
+    public List<Channel> getMyChannels() {
+        return myChannels;
+    }
+
     public void addNewChannel(String name, List<String> users) {
         Channel channel = new Channel(name, users, Application.getUserName(), false);
         otherChannels.add(channel);
