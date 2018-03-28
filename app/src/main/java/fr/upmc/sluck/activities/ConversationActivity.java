@@ -17,6 +17,11 @@ import fr.upmc.sluck.adapters.MessageListAdapter;
 import fr.upmc.sluck.adapters.NavigationDrawerAdapter;
 import fr.upmc.sluck.model.DrawerItem;
 import fr.upmc.sluck.model.Message;
+import fr.upmc.sluck.model.MessageRecievedUpdate;
+import fr.upmc.sluck.model.MessageSentUpdate;
+import fr.upmc.sluck.model.Update;
+import fr.upmc.sluck.model.User;
+import fr.upmc.sluck.model.UserStatusUpdate;
 
 /**
  * Created by labib on 21/03/2018.
@@ -31,7 +36,7 @@ public class ConversationActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
     private DrawerLayout mDrawerLayout;
     private ArrayList<DrawerItem> mDrawerItemList;
-    private ArrayList<Message> messages;
+    private ArrayList<Update> messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,11 @@ public class ConversationActivity extends Activity {
         // specify an adapter (see also next example)
         //TODO
         messages =new ArrayList<>();
-        messages.add(new Message("aa","hello","ayyoub", new Date(1)));
+        messages.add(new MessageRecievedUpdate(new Message("aa","hello","ayyoub", new Date(1))));
+        messages.add(new MessageSentUpdate(new Message("aa","hello","ayyoub", new Date(1))));
+        messages.add(new MessageSentUpdate(new Message("aa","how are you ?","ayyoub", new Date(1))));
+        messages.add(new UserStatusUpdate(new User("Tarek","1.1.1.1",1), Update.Type.USER_ENTERED));
+
         System.err.println(messages.toString());
         mAdapter = new MessageListAdapter(messages);
 
