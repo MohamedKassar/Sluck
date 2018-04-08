@@ -12,6 +12,10 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import fr.upmc.sluck.Application;
@@ -46,7 +50,7 @@ public class Sender {
     }
 
 
-    public void connect(GlobalController gc) throws IOException, JSONException {
+    public void connect(GlobalController gc) throws IOException, JSONException, ExecutionException, InterruptedException {
         final Socket socket = send(connexionServerIp, connexionServerPort, Application.getUserName());
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         final String[] response = bufferedReader.readLine().split(";");
@@ -95,7 +99,7 @@ public class Sender {
         USERS_ADDRESSES.forEach(user -> send(user, message));
         try {
             send(connexionServerIp, connexionServerPort, message);
-        } catch (IOException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             Log.v("01", "Cannot send message", e);
         }
@@ -109,18 +113,22 @@ public class Sender {
         USERS_ADDRESSES.add(new User(userName, userIp, userPort));
     }
 
-    private Socket send(String ip, int port, String message) throws IOException {
-        Socket socket = new Socket(ip, port);
-        final PrintStream out = new PrintStream(socket.getOutputStream());
-        out.println(message);
-        out.flush();
-        return socket;
+    private Socket send(String ip, int port, String message) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        Future<Socket> future = executor.submit(()->{
+            Socket socket = new Socket(ip, port);
+            final PrintStream out = new PrintStream(socket.getOutputStream());
+            out.println(message);
+            out.flush();
+            return socket;
+        });
+        return future.get();
     }
 
     private void send(User user, String message) {
         try {
             send(user.getIp(), user.getPort(), message);
-        } catch (IOException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             Log.v("01", "Cannot send message", e);
         }
