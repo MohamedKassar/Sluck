@@ -49,7 +49,7 @@
                 android:digits="0123456789."
                 android:hint="Ip address"
                 android:inputType="number|numberDecimal"
-                android:text="192.168.137.184" />
+                android:text="192.168.137.169" />
         </android.support.design.widget.TextInputLayout>
 
 

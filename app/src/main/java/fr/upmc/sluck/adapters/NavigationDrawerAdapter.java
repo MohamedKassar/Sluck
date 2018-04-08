@@ -8,8 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.upmc.sluck.R;
+import fr.upmc.sluck.controllers.OnItemSelecteListener;
+import fr.upmc.sluck.model.Channel;
 import fr.upmc.sluck.model.DrawerItem;
 
 /**
@@ -17,65 +20,50 @@ import fr.upmc.sluck.model.DrawerItem;
  */
 
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.DrawerViewHolder> {
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
-    private ArrayList<DrawerItem> drawerMenuList;
+    private List<Channel> drawerMenuList;
+    private OnItemSelecteListener mListener;
 
-    public NavigationDrawerAdapter(ArrayList<DrawerItem> drawerMenuList) {
+
+    public NavigationDrawerAdapter(List<Channel> drawerMenuList) {
         this.drawerMenuList = drawerMenuList;
     }
 
     @Override
     public DrawerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view ;
-        if(viewType == TYPE_HEADER){
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channels_group_name, parent, false);
-        }else{
             view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_drawer, parent, false);
-        }
-        return new DrawerViewHolder(view,viewType);
+
+        return new DrawerViewHolder(view);
     }
 
 
     @Override
     public void onBindViewHolder(DrawerViewHolder holder, int position) {
-        if(position == 0) {
-            holder.headerText.setText("Channel group");
-        }else{
-            holder.title.setText(drawerMenuList.get(position - 1).getTitle());
-            holder.icon.setImageResource(drawerMenuList.get(position - 1).getIcon());
-        }
+            holder.title.setText(drawerMenuList.get(position ).getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return drawerMenuList.size()+1;
+        return drawerMenuList.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(position == 0){
-            return TYPE_HEADER;
-        }
-        return TYPE_ITEM   ;
+    public void setOnItemClickLister(OnItemSelecteListener mListener) {
+        this.mListener = mListener;
     }
+
 
 
     public class DrawerViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        ImageView icon;
-        TextView headerText;
 
-        public DrawerViewHolder(View itemView,int viewType) {
+        public DrawerViewHolder(View itemView) {
             super(itemView);
 
-            if(viewType == 0){
-                headerText = itemView.findViewById(R.id.group_title);
-            }else {
                 title =  itemView.findViewById(R.id.title);
-                icon =  itemView.findViewById(R.id.icon);
-            }
+            itemView.setOnClickListener(view -> mListener.onItemSelected(view, getAdapterPosition()));
+
+
 
         }
     }

@@ -12,7 +12,7 @@ import java.util.List;
 import fr.upmc.sluck.R;
 import fr.upmc.sluck.model.MessageRecievedUpdate;
 import fr.upmc.sluck.model.MessageSentUpdate;
-import fr.upmc.sluck.model.Update;
+import fr.upmc.sluck.controllers.Update;
 import fr.upmc.sluck.model.UserStatusUpdate;
 
 /**

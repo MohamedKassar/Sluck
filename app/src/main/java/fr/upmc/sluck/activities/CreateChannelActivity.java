@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.app.ProgressDialog;
+import android.text.Layout;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class CreateChannelActivity extends AppCompatActivity {
         } catch (UtilException e) {
             e.printStackTrace();
         }
+
 
         _port.setText(cs.getPort()+"");
         _createChannel.setOnClickListener(v -> createChannel());

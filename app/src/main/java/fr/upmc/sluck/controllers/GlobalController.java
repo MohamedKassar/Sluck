@@ -18,7 +18,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import fr.upmc.sluck.Application;
+import fr.upmc.sluck.activities.ConversationActivity;
 import fr.upmc.sluck.model.Message;
+import fr.upmc.sluck.model.MessageSentUpdate;
 import fr.upmc.sluck.network.client.Sender;
 import fr.upmc.sluck.utils.exceptions.UtilException;
 import fr.upmc.sluck.model.Channel;
@@ -40,17 +42,21 @@ public class GlobalController {
         this.sender = sender;
     }
 
+
     public void addAvailableChannel(String channelName, String owner) {
-        availableChannels.add(new Channel(channelName, null, owner, false));
+        Channel c = new Channel(channelName, null, owner, false);
+        availableChannels.add(c);
+        ConversationActivity.adapterac.notifyDataSetChanged();
     }
 
-    public void addNewLocalChannel(String name) throws UtilException {
+    public Channel addNewLocalChannel(String name) throws UtilException {
         List<String> users = new LinkedList<>();
         users.add(Application.getUserName());
         Util.createChannelFolder(name, users, Application.getUserName());
         Channel channel = new Channel(name, users, Application.getUserName(), true);
         myChannels.add(channel);
         sender.notifyChannelCreation(name);
+        return channel;
     }
 
     public Channel addNewUser(String channelName, String userName) {
@@ -118,13 +124,26 @@ public class GlobalController {
                 }
             }
             channel.postMessage(message);
+            if(channel.getName().equalsIgnoreCase(ConversationActivity.currentChannel)){
+                if(message.getSender().equalsIgnoreCase(Application.getUserName()))
+                    ConversationActivity.messages.add(new MessageSentUpdate(message));
+                else
+                    ConversationActivity.messages.add(new MessageSentUpdate(message));
+                ConversationActivity.mAdapter.notifyDataSetChanged();
+            }
         }
         return channel;
     }
 
-    public void sendMessageOnChannel(String message, String channelName) {
-        Channel channel = receiveMessageOnChannel(new Message(channelName, message, Application.getUserName()), channelName);
-        if (channel != null) sender.sendMessage(channel, message);
+    public Message sendMessageOnChannel(String message, String channelName) {
+        Message  msg = new Message(channelName, message, Application.getUserName());
+        Channel channel = receiveMessageOnChannel(msg, channelName);
+        if (channel != null) {
+            sender.sendMessage(channel, message);
+            return msg;
+        }
+        return null;
+
     }
 
     private List<Message> readMessagesFromChannel(String channelName, int packetsNumber) {

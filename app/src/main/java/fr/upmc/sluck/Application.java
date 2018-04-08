@@ -48,6 +48,10 @@ public class Application extends android.app.Application {
         }
     }
 
+    public GlobalController getController() {
+        return controller;
+    }
+
     private boolean connexionServerStarted = false;
 
     public ConnexionServer startConnexionServer() throws IOException, UtilException {

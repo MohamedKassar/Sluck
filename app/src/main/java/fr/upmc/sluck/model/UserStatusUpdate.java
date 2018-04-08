@@ -1,5 +1,7 @@
 package fr.upmc.sluck.model;
 
+import fr.upmc.sluck.controllers.Update;
+
 /**
  * Created by labib on 28/03/2018.
  */

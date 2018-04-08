@@ -1,4 +1,4 @@
-package fr.upmc.sluck.model;
+package fr.upmc.sluck.controllers;
 
 import java.util.Enumeration;
 

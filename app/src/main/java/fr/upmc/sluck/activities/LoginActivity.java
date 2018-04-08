@@ -61,11 +61,11 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         new Thread(() -> ip = getApIpAddr(getApplicationContext())).start();
         _loginButton.setOnClickListener(v -> login());
-
+        app = (Application) getApplicationContext();
         _createChannelLink.setOnClickListener(v -> {
             // Start the Signup activity
             ButterKnife.bind(this);
-            app = (Application) getApplicationContext();
+
 
 
             try {

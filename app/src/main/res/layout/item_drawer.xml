@@ -4,10 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:background="?attr/selectableItemBackground">
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
