@@ -5,6 +5,7 @@ import android.content.Context;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import fr.upmc.sluck.controllers.GlobalController;
 import fr.upmc.sluck.network.client.Sender;
@@ -42,7 +43,13 @@ public class Application extends android.app.Application {
             this.sender = new Sender(userName, connexionServerIp, port);
             this.controller = new GlobalController(sender);
             this.localServer = new LocalServer(controller, sender);
-            sender.connect(this.controller);
+            try {
+                sender.connect(this.controller);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             this.connected = true;
             //todo
         }
