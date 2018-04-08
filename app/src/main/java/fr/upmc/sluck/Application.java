@@ -45,12 +45,11 @@ public class Application extends android.app.Application {
             this.localServer = new LocalServer(controller, sender);
             try {
                 sender.connect(this.controller);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             this.connected = true;
+            localServer.start();
             //todo
         }
     }
